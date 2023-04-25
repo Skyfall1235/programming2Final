@@ -43,13 +43,22 @@ public class UIBehavior : MonoBehaviour
             selectedTowerBase = hit.collider.gameObject;
             Debug.Log("Selected tower: " + selectedTowerBase.name);
         }
+        else
+        {
+            //if the player clicks off, null the selection
+            selectedTowerBase = null;
+        }
 
         //Display the post process glow
+        //should we also display the selection menu?
     }
     //places the tower if the player can afford it. data is then saved to the towermanagement script
+
+    //how do we call this method?
     public void PlaceTower(GameObject selectedTowerBase, GameObject selectedTower, int price)
     {
-        if (CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(price))
+        //if the base doesnt have a tower and the player can afford it, place the tower.
+        if (!CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(price))
         {
             //instatiate the selected prefab here, and subtract the price, and give the towerbase component the selected gameobject
             GameObject spawnedObject = Instantiate(selectedTower, selectedTowerBase.GetComponent<TowerManagement>().towerSpawnLocation.transform.position, Quaternion.identity);
@@ -72,7 +81,7 @@ public class UIBehavior : MonoBehaviour
 
     private bool CheckIfTowerExists(GameObject selectedTowerBase)
     {
-        //check the tower base for a link to a placed tower. if there is no tower, return false
+        //check the tower base for a link to a placed tower. if there is no tower built, return false
         if(selectedTowerBase.GetComponent<TowerManagement>().givenTower != null)
         {
             return true;
