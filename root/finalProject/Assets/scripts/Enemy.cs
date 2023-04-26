@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy
+public class Enemy : MonoBehaviour
 {
-    //enemies need a relevant damage type to the player, an HP t chip away, a damage to players health, and some ability to call special abilites?
+    //enemies need a relevant damage type to the player, an HP to chip away, a damage to players health, and some ability to call special abilites?
     protected int enemyHP;
     protected int enemyMaxHP;
     protected int enemyArmor;
@@ -18,7 +18,7 @@ public class Enemy
 
     //dmaage dealt to the player can be handled by the health script, just grab the damage type and player.
 
-    //damage to the enemy can be resaolved here using polymorphism
+    //damage to the enemy can be resolved here using polymorphism
     //it needs to compare the incoming damage type to the type of enemy
     public void DetermineTrueDamageValue(int baseDamage, DamageType type)
     {
@@ -29,11 +29,13 @@ public class Enemy
                 {
                     case DamageType.Piercing:
                         //take double damage
+                        TakeTrueDamage(baseDamage, 2);
                         break;
                     case DamageType.Explosive:
                         // run the equivilent of the base damage, but remove my armor value
+                        TakeTrueDamage(baseDamage, 1);
+                        StripArmor();
                         break;
-
                     default:
                         // do nothing
                         break;
@@ -45,6 +47,7 @@ public class Enemy
                 {
                     case DamageType.Heat:
                         // take normal damage
+                        TakeTrueDamage(baseDamage, 1);
                         break;
 
                     default:
@@ -55,6 +58,7 @@ public class Enemy
 
             case EnemyStyle.Healing:
                 // probably have a percent damage reduction? or nothing at all
+                TakeTrueDamage(baseDamage, 1);
                 break;
 
             default: //runs the EnemyStyle.Base stuff
@@ -65,7 +69,8 @@ public class Enemy
 
     public void SetUpValues()
     {
-
+        enemyHP = enemyMaxHP;
+        scoreValue = enemyMaxHP;
     }
 
     private void StripArmor()
@@ -74,16 +79,24 @@ public class Enemy
         enemyArmor = 0;
     }
 
-    private void TakeTrueDamage(int damage)
+    private void TakeTrueDamage(int damage, int multiplier)
     {
-        enemyHP -= damage;
+        //reduces the damage based no the armor value. anything that makes the raw damage go negative gets nulled to 0
+        int rawDamage = damage * multiplier;
+        int valueAfterArmorReduction = rawDamage - enemyArmor;
+        if (valueAfterArmorReduction < 0)
+        {
+            valueAfterArmorReduction = 0;
+        }
+        //any dmaage thats gets through or doesnt have a reductino just gos right in
+        enemyHP -= valueAfterArmorReduction;
         if (enemyHP <= 0)
         {
             Death();
         }
     }
-
-    protected void Death()
+    //kill the enemy, giv the player the socre, and provide some funds?
+    private void Death()
     {
 
     }
@@ -93,6 +106,7 @@ public class Enemy
     public virtual void SpecialAbility()
     {
         Debug.Log("no special ability!");
+        //in overrides, this will start the relavent coroutine
     }
 }
 

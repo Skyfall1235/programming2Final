@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class BaseTower : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    //the base clas has a base damage value, and a dmaage type.
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //it also has a fire rate and a method that uses a coroutine to shoot projectiles at the FIRST 
+
+    //it also has an ability
 }

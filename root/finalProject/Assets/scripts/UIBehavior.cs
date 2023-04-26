@@ -55,7 +55,7 @@ public class UIBehavior : MonoBehaviour
     //places the tower if the player can afford it. data is then saved to the towermanagement script
 
     //how do we call this method?
-    public void PlaceTower(GameObject selectedTowerBase, GameObject selectedTower, int price)
+    public void PlaceTower(GameObject selectedTower, int price)
     {
         //if the base doesnt have a tower and the player can afford it, place the tower.
         if (!CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(price))
@@ -66,7 +66,22 @@ public class UIBehavior : MonoBehaviour
             
             //selectedTowerBase
             playerData.moneyAmount -= price;
+            //nullify the selected base so we can interct with something else
+            selectedTowerBase = null;
         }
+        else if (CheckIfPlayerCanAffordTower(price))
+        {
+            //tell the player they cannot afford it
+        }
+        else if (!CheckIfTowerExists(selectedTowerBase))
+        {
+            //there is a tower already there
+        }
+        else
+        {
+            //no tower selected
+        }
+
     }
     public void DestroyTower(GameObject selectedTowerBase)
     {
