@@ -13,15 +13,21 @@ public class TowerManagement : MonoBehaviour
 }
 public enum EnemyStyle
 { 
-    Normal,
-    Invisible,
-    Lead,
+    Base, //normal, everything does normal damage to them
+    Armored, //can only be damaged by piercing or explosive
+    HeatShielded, //can only be damaged with heat
+    Healing, // have large HP pools and can regenerate
+
 }
 public enum DamageType
 { 
-    Sharp,
-    Tracking,
-    Heat
+    Normal, //normal dmaage
+    Piercing, //double damage to normal targets or normal damage to armored
+    Explosive, // breaks armor completely
+    Heat, // x1.5 damage to base, or normal to heatshielded
+
+
 }
+
 
 
