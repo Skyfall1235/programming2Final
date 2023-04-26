@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    //enemies need a relevant damage type to the player, an HP t chip away, a damage to players health, and some ability to call special abilites?
+    protected int enemyHP;
+    protected int damageToPlayer;
+    protected DamageType damageType;
 
-    // Update is called once per frame
-    void Update()
+
+
+
+    //public DealDamageToPlayer()
+
+
+    public virtual void SpecialAbility(DamageType type)
     {
-        
+        Debug.Log("no special ability!");
     }
 }
+
+
