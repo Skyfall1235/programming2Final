@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class UIBehavior : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class UIBehavior : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveValue;
     [SerializeField] private TextMeshProUGUI playerCurrency;
 
+    [SerializeField] public List <TowerInfo> towerPrefabInfo = new List<TowerInfo> ();
+    
 
     private void Start()
     {
@@ -25,12 +28,8 @@ public class UIBehavior : MonoBehaviour
         UpdateStatusUI();
     }
 
-
-
-    GameObject selectedTowerBase = null;
-
-
     #region Modification of Towers
+    GameObject selectedTowerBase = null;
 
     public void SelectTowerBase()
     {
@@ -55,21 +54,24 @@ public class UIBehavior : MonoBehaviour
     //places the tower if the player can afford it. data is then saved to the towermanagement script
 
     //how do we call this method?
-    public void PlaceTower(GameObject selectedTower, int price)
+
+    //search the list using the int to find the right one. i cant seem to let a method take a struct as a parameter :(
+    public void PlaceTower(int selectedTower)
     {
+        TowerInfo towerInfo = towerPrefabInfo[selectedTower];
         //if the base doesnt have a tower and the player can afford it, place the tower.
-        if (!CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(price))
+        if (!CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(towerInfo.towerPrice))
         {
             //instatiate the selected prefab here, and subtract the price, and give the towerbase component the selected gameobject
-            GameObject spawnedObject = Instantiate(selectedTower, selectedTowerBase.GetComponent<TowerManagement>().towerSpawnLocation.transform.position, Quaternion.identity);
+            GameObject spawnedObject = Instantiate(towerInfo.towerPrefab, selectedTowerBase.GetComponent<TowerManagement>().towerSpawnLocation.transform.position, Quaternion.identity);
             selectedTowerBase.GetComponent<TowerManagement>().givenTower = spawnedObject;
             
             //selectedTowerBase
-            playerData.moneyAmount -= price;
+            playerData.moneyAmount -= towerInfo.towerPrice;
             //nullify the selected base so we can interct with something else
             selectedTowerBase = null;
         }
-        else if (CheckIfPlayerCanAffordTower(price))
+        else if (CheckIfPlayerCanAffordTower(towerInfo.towerPrice))
         {
             //tell the player they cannot afford it
         }
@@ -126,14 +128,14 @@ public class UIBehavior : MonoBehaviour
 
 
 
-    bool menuIsOpen = true;
+    bool menuIsOpen = false;
     public void OpenPurchaseMenu()
     {
         menuIsOpen = !menuIsOpen;
 
         if(menuIsOpen)
         {
-            //display he purchase panel
+            //display the purchase panel
             purchaseMenu.SetActive(false);
         }
         if(!menuIsOpen)
@@ -147,4 +149,11 @@ public class UIBehavior : MonoBehaviour
 
 
     #endregion
+}
+[System.Serializable]
+public struct TowerInfo
+{
+    public string towerName;
+    public int towerPrice;
+    public GameObject towerPrefab;
 }

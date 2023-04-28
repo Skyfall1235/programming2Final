@@ -95,10 +95,18 @@ public class Enemy : MonoBehaviour
             Death();
         }
     }
-    //kill the enemy, giv the player the socre, and provide some funds?
+    //kill the enemy, give the player the score, and provide some funds?
     private void Death()
     {
-
+        GameObject gameManager = GameObject.FindWithTag("GameManager");
+        GameManagement managerScript = gameManager.GetComponent<GameManagement>();
+        if (gameManager != null)
+        {
+            managerScript.playerData.score += scoreValue;
+            managerScript.playerData.moneyAmount += scoreValue;
+        }
+        //the last thing, after all info is updated
+        Destroy(gameObject);
     }
 
     //for subclases, when this is called (every so often, like 5~ seconds?) it will perform 1 action based on the tpye of the enemy
