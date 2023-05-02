@@ -30,7 +30,7 @@ public class UIBehavior : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             SelectTowerBase();
-            Debug.Log("Left mouse button pressed!");
+            //Debug.Log("Left mouse button pressed!");
         }
 
     }

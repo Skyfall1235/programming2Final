@@ -1,22 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class BaseTower : MonoBehaviour
 {
     //the base clas has a base damage value, and a dmaage type.
-    [SerializeField] protected int baseDamage;
-    [SerializeField] protected DamageType damageType;
-    [SerializeField] protected float fireRate;
+    [SerializeField] protected int baseDamage = 1;
+    [SerializeField] protected DamageType damageType = DamageType.Normal;
+    [SerializeField] protected float fireRate = 2;
     [SerializeField] protected Transform muzzle;
     [SerializeField] protected GameObject targetEnemy;
-    [SerializeField] protected float maxDistance;
-    [SerializeField] protected Transform enemyContainer;
+    [SerializeField] protected float maxDistance = 7;
+    [SerializeField] protected GameObject enemyContainer;
     [SerializeField] protected bool canShootEnemy;
 
-    private void Setup()
+    public void Setup()
     {
-
+        enemyContainer = GameObject.Find("EnemyContainer");
+        InvokeRepeating("TowerAbility", 1, 10f);
     }
     protected IEnumerator ShootCoroutine(GameObject projectilePrefab)
     {
@@ -35,13 +37,12 @@ public class BaseTower : MonoBehaviour
         }
     }
 
-    protected void AimAtFirstEnemyInRange()
+    protected void TargetFirstEnemyInRange()//locates the best enemy. targets the first enemy in the list that is within range
     {
         List<GameObject> enemyList = new List<GameObject>();
-        GameObject[] childObjects = enemyContainer.GetComponentsInChildren<GameObject>();
-        foreach (GameObject child in childObjects)
+        for (int i = 0; i < enemyContainer.transform.childCount; i++)
         {
-            enemyList.Add(child);
+            enemyList.Add(enemyContainer.transform.GetChild(i).gameObject);
         }
         foreach (GameObject enemy in enemyList)
         {
@@ -51,7 +52,13 @@ public class BaseTower : MonoBehaviour
                 targetEnemy = enemy;
                 break;
             }
+            else
+            {
+                targetEnemy = null; 
+                break;
+            }
         }
+
     }
     //it also has a fire rate and a method that uses a coroutine to shoot projectiles at the FIRST 
 
