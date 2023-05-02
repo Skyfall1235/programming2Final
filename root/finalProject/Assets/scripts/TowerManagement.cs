@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TowerManagement : MonoBehaviour
 {
+
+    //this goes on tower BAse so we can accesses its tower above :)
     public GameObject givenTower;
     public GameObject towerSpawnLocation;
 

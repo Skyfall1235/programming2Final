@@ -1,23 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
     //enemies need a relevant damage type to the player, an HP to chip away, a damage to players health, and some ability to call special abilites?
+    //gonna be expirienmenting with protected varaibles, see how they work ig?
     protected int enemyHP;
+    public int Health
+        { get { return enemyHP; } } 
     protected int enemyMaxHP;
     protected int enemyArmor;
-    protected int damageToPlayer;
     protected EnemyStyle style;
     protected int scoreValue;
+    [SerializeField] protected string endTrigger;
+    [SerializeField] protected float speed;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected GameObject target;
 
-
-
-
-
-    //dmaage dealt to the player can be handled by the health script, just grab the damage type and player.
-
+    private void Start()
+    {
+        StartUp();
+    }
+    private void Update()
+    {
+        BaseClassUpdates();
+    }
+    private void StartUp()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        target = GameObject.Find(endTrigger);
+    }
+    private void BaseClassUpdates()
+    {
+        if (target != null)
+        {
+            agent.SetDestination(target.transform.position);
+            agent.speed = speed;
+        }
+    }
+    //damage dealt to the player can be handled by the health script, just grab the damage type and player.
     //damage to the enemy can be resolved here using polymorphism
     //it needs to compare the incoming damage type to the type of enemy
     public void DetermineTrueDamageValue(int baseDamage, DamageType type)
@@ -114,7 +137,7 @@ public class Enemy : MonoBehaviour
     public virtual void SpecialAbility()
     {
         Debug.Log("no special ability!");
-        //in overrides, this will start the relavent coroutine
+        //in overrides, this will start the relevant coroutine
     }
 }
 

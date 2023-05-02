@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Runtime.CompilerServices;
+using UnityEngine.EventSystems;
 
 public class UIBehavior : MonoBehaviour
 {
@@ -26,16 +27,28 @@ public class UIBehavior : MonoBehaviour
     private void Update()
     {
         UpdateStatusUI();
+        if (Input.GetMouseButtonDown(0))
+        {
+            SelectTowerBase();
+            Debug.Log("Left mouse button pressed!");
+        }
+
     }
 
     #region Modification of Towers
-    GameObject selectedTowerBase = null;
+    [SerializeField] GameObject selectedTowerBase = null;
 
     public void SelectTowerBase()
     {
         //Get the GameObject that was clicked
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        //how i seperate UI from Game objects
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+
+            return;
+        }
         if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("tower"))
         {
             //Save the selected GameObject
@@ -53,14 +66,12 @@ public class UIBehavior : MonoBehaviour
     }
     //places the tower if the player can afford it. data is then saved to the towermanagement script
 
-    //how do we call this method?
-
     //search the list using the int to find the right one. i cant seem to let a method take a struct as a parameter :(
     public void PlaceTower(int selectedTower)
     {
         TowerInfo towerInfo = towerPrefabInfo[selectedTower];
         //if the base doesnt have a tower and the player can afford it, place the tower.
-        if (!CheckIfTowerExists(selectedTowerBase) && CheckIfPlayerCanAffordTower(towerInfo.towerPrice))
+        if (!CheckIfTowerExists(selectedTowerBase) && PlayerCanAffordTower(towerInfo.towerPrice))
         {
             //instatiate the selected prefab here, and subtract the price, and give the towerbase component the selected gameobject
             GameObject spawnedObject = Instantiate(towerInfo.towerPrefab, selectedTowerBase.GetComponent<TowerManagement>().towerSpawnLocation.transform.position, Quaternion.identity);
@@ -71,7 +82,7 @@ public class UIBehavior : MonoBehaviour
             //nullify the selected base so we can interct with something else
             selectedTowerBase = null;
         }
-        else if (CheckIfPlayerCanAffordTower(towerInfo.towerPrice))
+        else if (PlayerCanAffordTower(towerInfo.towerPrice))
         {
             //tell the player they cannot afford it
         }
@@ -108,7 +119,7 @@ public class UIBehavior : MonoBehaviour
             return false;
         }
     }
-    private bool CheckIfPlayerCanAffordTower(int price)
+    private bool PlayerCanAffordTower(int price)
     {
         if (playerData.moneyAmount - price < 0)
         { return false; }

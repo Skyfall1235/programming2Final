@@ -5,17 +5,13 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class EnemyManager : MonoBehaviour
 {
-    public struct EnemyDataStruct
-    {
-        public GameObject enemyPrefab;
-        public int startWave;
-        public int enemyValue;
-    }
+
     //all possible enemy types, with thier weights and startWaves
     public List<EnemyDataStruct> enemyData = new List<EnemyDataStruct>();
     private int currentWave;
     private float timeBetweenAbilities;
     private float timeBetweenSpawn;
+    [SerializeField] private GameObject spawnPoint;
 
     //how long the couroutine should wait
     public float enemySpawnDelay = 1f;
@@ -83,6 +79,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (GameObject enemyPrefab in enemies)
         {
+            //how do i spawn at a start position again?
             GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(enemySpawnDelay);
         }
@@ -103,4 +100,21 @@ public class EnemyManager : MonoBehaviour
 
     //this script will andle the order of othe enmyies to ensure they spawn in sync,
     //their special abilities occur, and for the turret to reference the order of enemys
+
+
+
+
+
+    [System.Serializable]
+    public struct EnemyDataStruct
+    {
+        //is just for organisation
+        [SerializeField] private string enemyName;
+        //the prefab itself
+        public GameObject enemyPrefab;
+        //the first wave it can appear on
+        public int startWave;
+        //likelyhood of spawning
+        public int enemyValue;
+    }
 }
