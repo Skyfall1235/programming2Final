@@ -14,13 +14,23 @@ public class BaseTower : MonoBehaviour
     [SerializeField] protected float maxDistance = 7;
     [SerializeField] protected GameObject enemyContainer;
     [SerializeField] protected bool canShootEnemy;
+    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected GameObject turret;
 
     public void Setup()
     {
         enemyContainer = GameObject.Find("EnemyContainer");
         InvokeRepeating("TowerAbility", 1, 10f);
+        StartCoroutine(ShootCoroutine());
     }
-    protected IEnumerator ShootCoroutine(GameObject projectilePrefab)
+    public void UpdateThisToo()
+    {
+        if (targetEnemy != null)
+        {
+            turret.transform.LookAt(targetEnemy.transform);
+        }
+    }
+    protected IEnumerator ShootCoroutine()
     {
         while (canShootEnemy)
         {
@@ -30,7 +40,11 @@ public class BaseTower : MonoBehaviour
                 continue;
             }
             //create the prefab at the mizzle location at its direction
-            GameObject projectileGO = Instantiate(projectilePrefab, muzzle.position, muzzle.rotation);
+            GameObject projectile = Instantiate(projectilePrefab, muzzle.position, muzzle.rotation);
+            Vector3 targetDirection = targetEnemy.transform.position - transform.position;
+            projectile.transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+            projectile.GetComponent<Projectile>().damage = baseDamage;
+            projectile.GetComponent<Projectile>().damageType = damageType;
             //handle shooting later
 
             yield return new WaitForSeconds(1f / fireRate);
@@ -58,7 +72,7 @@ public class BaseTower : MonoBehaviour
                 break;
             }
         }
-
+        
     }
     //it also has a fire rate and a method that uses a coroutine to shoot projectiles at the FIRST 
 

@@ -14,5 +14,6 @@ public class BasicTower : BaseTower
     void Update()
     {
         TargetFirstEnemyInRange();
+        UpdateThisToo();
     }
 }

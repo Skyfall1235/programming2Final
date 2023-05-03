@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95201af9ba47b9d4c90adb1547399ea3, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moneyAmount: 25
-  waveCount: 1
+  moneyAmount: 7
+  waveCount: 7
   health: 15
-  score: 0
+  score: 12

@@ -69,11 +69,14 @@ public class UIBehavior : MonoBehaviour
     //search the list using the int to find the right one. i cant seem to let a method take a struct as a parameter :(
     public void PlaceTower(int selectedTower)
     {
+        Debug.Log("placed tower?");
         TowerInfo towerInfo = towerPrefabInfo[selectedTower];
         //if the base doesnt have a tower and the player can afford it, place the tower.
+        Debug.Log("placed tower?");
         if (!CheckIfTowerExists(selectedTowerBase) && PlayerCanAffordTower(towerInfo.towerPrice))
         {
             //instatiate the selected prefab here, and subtract the price, and give the towerbase component the selected gameobject
+            Debug.Log("placing object now");
             GameObject spawnedObject = Instantiate(towerInfo.towerPrefab, selectedTowerBase.GetComponent<TowerManagement>().towerSpawnLocation.transform.position, Quaternion.identity);
             selectedTowerBase.GetComponent<TowerManagement>().givenTower = spawnedObject;
             
@@ -96,7 +99,7 @@ public class UIBehavior : MonoBehaviour
         }
 
     }
-    public void DestroyTower(GameObject selectedTowerBase)
+    public void DestroyTower()
     {
         //if there is a tower exists on the towerbase, destroy the TOWER PREFAB
         if(CheckIfTowerExists(selectedTowerBase))

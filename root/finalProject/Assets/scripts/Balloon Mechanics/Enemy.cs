@@ -7,10 +7,10 @@ public class Enemy : MonoBehaviour
 {
     //enemies need a relevant damage type to the player, an HP to chip away, a damage to players health, and some ability to call special abilites?
     //gonna be expirienmenting with protected varaibles, see how they work ig?
-    protected int enemyHP;
+    [SerializeField] protected int enemyHP;
     public int Health
-        { get { return enemyHP; } } 
-    protected int enemyMaxHP;
+        { get { return enemyHP; } }
+    [SerializeField] protected int enemyMaxHP = 1;
     protected int enemyArmor;
     protected EnemyStyle style;
     protected int scoreValue;
@@ -21,11 +21,16 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        SetUpValues();
         StartUp();
     }
     private void Update()
     {
         BaseClassUpdates();
+        if (enemyHP <= 0)
+        {
+            Death();
+        }
     }
     private void StartUp()
     {
@@ -86,6 +91,7 @@ public class Enemy : MonoBehaviour
 
             default: //runs the EnemyStyle.Base stuff
                 // //runs the base damage calculation
+                TakeTrueDamage(baseDamage, 1);
                 break;
         }
     }
@@ -113,10 +119,6 @@ public class Enemy : MonoBehaviour
         }
         //any dmaage thats gets through or doesnt have a reductino just gos right in
         enemyHP -= valueAfterArmorReduction;
-        if (enemyHP <= 0)
-        {
-            Death();
-        }
     }
     //kill the enemy, give the player the score, and provide some funds?
     private void Death()

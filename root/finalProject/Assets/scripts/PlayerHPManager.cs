@@ -22,6 +22,7 @@ public class PlayerHPManager : MonoBehaviour
             if (enemyBase != null)
             {
                 HP -= enemyBase.Health;
+                Destroy(other.gameObject);
             }
             else
             {

@@ -87,8 +87,9 @@ public class EnemyManager : MonoBehaviour
     public void StartWave()
     {
         Debug.Log("starting wave");
-        StartCoroutine(SpawnEnemies(DetermineEnemiesToSpawn()));
-        currentWave++;
+        List<GameObject> enemies = DetermineEnemiesToSpawn();
+        StartCoroutine(SpawnEnemies(enemies));
+        playerData.waveCount++;
         //work on a way to use the playerData WaveCount instead of controlling it privately
     }
 
